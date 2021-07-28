@@ -1,0 +1,144 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.content {
+  padding: 20px;
+}
+
+.header {
+  padding: 10px;
+  background: #edf2f4;
+  border-bottom: 1px solid #999;
+}
+.header a {
+  color: #0072ff;
+  text-decoration: none;
+  margin-left: 20px;
+  margin-right: 5px;
+}
+.header a:hover {
+  color: #8a0f53;
+}
+.header small {
+  color: #666;
+}
+.header .active {
+  color: #2c7613;
+}
+
+img, video {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+/**
+ * CONTENT WRAPPER
+ */
+
+ .wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 1.5em;
+  padding-left: 1.5em;
+  max-width: 1080px;
+}
+
+/* Masonry grid */
+.masonry {
+  transition: all .5s ease-in-out;
+  column-gap: 30px;
+  column-fill: initial;
+}
+
+/* Masonry item */
+.masonry .brick {
+  margin-bottom: 30px;
+  display: inline-block; /* Fix the misalignment of items */
+  vertical-align: top; /* Keep the item on the very top */
+}
+
+/* Masonry image effects */
+.masonry .brick img {
+  transition: all .5s ease-in-out;
+  backface-visibility: hidden; /* Remove Image flickering on hover */
+}
+
+.masonry .brick:hover img {
+  opacity: .75;
+}
+
+/* Bordered masonry */
+.masonry.bordered {
+  column-rule: 1px solid #eee;
+  column-gap: 50px;
+}
+
+.masonry.bordered .brick {
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Gutterless masonry */
+.masonry.gutterless {
+  column-gap: 0;
+}
+
+.masonry.gutterless .brick {
+  margin-bottom: 0;
+}
+
+/* Masonry on tablets */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+
+/* Masonry on big screens */
+@media only screen and (min-width: 1024px) {
+  .desc {
+    font-size: 1.25em;
+  }
+
+  .intro {
+    letter-spacing: 1px;
+  }
+
+  .masonry {
+    column-count: 3;
+  }
+}
+
+input[type=email], input[type=password],input[type=text], textarea {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+input[type=button],input[type=submit] {
+  width: 50%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
