@@ -12,11 +12,11 @@ function Login(props) {
   const handleLogin = () => {
     setError(null);
     setLoading(true);
-    axios.post('http://localhost:8080/UK/imageApp/api/login', { email: email.value, password: password.value }
+    axios.post('https://mi-linux.wlv.ac.uk/~2017765/galleryApi/api/login', { email: email.value, password: password.value }
     ).then(response => {
       setLoading(false);  
       setUserSession(response.data.token, response.data.data);
-      props.history.push('/add-image');
+      props.history.push('/');
     }).catch(error => {
       setLoading(false);
       if (error.status === 401) setError(error.data.message);

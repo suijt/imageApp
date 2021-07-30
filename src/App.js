@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Switch, NavLink } from 'react-router-dom';
 import axios from 'axios';
 
 import Login from './Components/Login';
-import Dashboard from './Components/Dashboard';
+import AddImage from './Components/AddImage';
 import Home from './Components/Home';
+import EditImage from './Components/EditImage';
 
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
@@ -19,10 +20,12 @@ function App() {
       return;
     }
 
-    axios.get(`http://localhost:4000/verifyToken?token=${token}`).then(response => {
+    axios.get(`https://mi-linux.wlv.ac.uk/~2017765/galleryApi/api/verify?token=${token}`).then(response => {
       setUserSession(response.data.token, response.data.user);
+      // console.log('toeknpass');
       setAuthLoading(false);
     }).catch(error => {
+      // console.log('toeknfail');
       removeUserSession();
       setAuthLoading(false);
     });
@@ -43,9 +46,10 @@ function App() {
           </div>
           <div className="content">
             <Switch>
-              <Route exact path="/" component={Home} />
+              <PrivateRoute exact path="/" component={Home} />
               <PublicRoute path="/login" component={Login} />
-              <PrivateRoute path="/add-image" component={Dashboard} />
+              <PrivateRoute path="/add-image" component={AddImage} />            
+              <PrivateRoute path="/edit-image/:id" component={EditImage} />            
             </Switch>
           </div>
         </div>

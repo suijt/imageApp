@@ -1,53 +1,81 @@
-import React from 'react';
- 
-function Home() {
+import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
+import axios from "axios";
+import { getUser, removeUserSession } from '../Utils/Common';
+
+function Home(props) {
+  const [loadimage, setImage] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const user = getUser();
+
+  // handle click event of logout button
+  const handleLogout = () => {
+    removeUserSession();
+    props.history.push('/login');
+  }
+
+  useEffect(() => {
+    loadImages();
+  }, []);
+
+
+
+  const loadImages = async () => {
+    const result = await axios.get("https://mi-linux.wlv.ac.uk/~2017765/galleryApi/api/image-list");
+    setImage(result.data.reverse());
+  };
+
+  const deleteImage = id => {
+    if (window.confirm("Are you sure want to delete?")) {
+      axios.get('https://mi-linux.wlv.ac.uk/~2017765/galleryApi/api/image-delete/' + id, {
+        method: 'GET'
+      }).then(response => {
+        if (response.status === 200) {
+          alert("Image deleted successfully");
+          axios.get('https://mi-linux.wlv.ac.uk/~2017765/galleryApi/api/image-list')
+            .then(res => {
+              setImage(res.data.reverse());
+            });
+        }
+      });
+    }
+  }
   return (
     <div className="wrapper">
-      <h1 className="title">Image Gallery</h1>
-      <div className="masonry bordered">
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/cherry-plant.jpg" alt="Cherry plant" title="Cherry plant" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
+      <div className="header-sec">
+        <div className="title">
+          <h1>Welcome {user.first_name + ' ' + user.last_name}</h1>
         </div>
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/oranges-pomegranates.jpg" alt="Oranges and Pomegranates" title="Oranges and Pomegranates" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
+        <div className="btn">
+          <a href="#" onClick={handleLogout} className="delete-btn">Logout </a>
         </div>
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/strawberry.jpg" alt="Strawberry" title="Strawberry" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
+        <div className="search-sec">
+          <input type="text" className="search-input" id="search" placeholder="Image Search Keyword" onChange={(e) => { setKeyword(e.target.value) }} />
         </div>
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/blueberries.jpg" alt="Blueberries" title="Blueberries" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
+      </div>
+      <hr />
+      <div className="body-sec">
+        <h1 className="title">Image Gallery</h1>
+        <div className="masonry bordered">
+          {loadimage.filter((val) => {
+            if (keyword == "") {
+              return val;
+            } else if (val.title.toLowerCase().includes(keyword.toLowerCase())) {
+              return val;
+            }
+          }).map((item) => (
+            <div className="brick">
+              <img src={"https://mi-linux.wlv.ac.uk/~2017765/galleryApi/uploads/images/" + item.image} alt={item.title} title={item.title} /><br />
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <Link to={`/edit-image/${item.id}`} className="edit-btn">Edit</Link>
+              <a href="#" onClick={e => deleteImage(item.id)} className="delete-btn">Delete</a>
+            </div>
+          ))}
         </div>
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/pears.jpg" alt="Pears" title="Pears" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
-        </div>
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/easter-eggs.jpg" alt="Easter-eggs" title="Easter-eggs" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
-        </div>
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/lemons.jpg" alt="Lemons" title="Lemons" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
-        </div>
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/cherries.jpg" alt="Cherries" title="Cherries" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
-        </div>
-        <div className="brick">
-          <img src="https://w3bits.com/files/img/grapes.jpg" alt="Grapes" title="Grapes" /><br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
-        </div>
-        <div class="brick">
-          <img src="https://media-cache-ec0.pinimg.com/600x/0b/87/f4/0b87f4eb50b3d7a7c9d70d97234753ab.jpg" alt="text" /> <br/>
-          <p>Lorem ipsum dolor sit amet, dicta dolore adipisci hic ipsam velit deleniti possimus cumque accusantium rerum quibusdam.</p>
-		    </div>
-      </div>  
+      </div>
     </div>
   );
 }
- 
+
 export default Home;
